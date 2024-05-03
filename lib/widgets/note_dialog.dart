@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/services/note_service.dart';
 
@@ -19,7 +18,7 @@ class NoteDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
         note == null ? 'Add Notes' : 'Update Notes',
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 25,
         ),
