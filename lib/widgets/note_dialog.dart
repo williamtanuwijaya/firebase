@@ -1,18 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/services/note_service.dart';
 
 class NoteDialog extends StatelessWidget {
-  final String? noteId;
+  final Map<String, dynamic>? note;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  NoteDialog({super.key});
+  NoteDialog({super.key, this.note}) {
+    if (note != null) {
+      _titleController.text = note!['title'];
+      _descriptionController.text = note!['description'];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        noteId == null ? 'Add Notes' : 'Update Notes',
+        note == null ? 'Add Notes' : 'Update Notes',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 25,
@@ -65,15 +71,22 @@ class NoteDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            if (noteId == null) {
-              
+            if (note == null) {
+              NoteService.addNote(
+                      _titleController.text, _descriptionController.text)
+                  .whenComplete(() {
+                Navigator.of(context).pop();
+              });
             } else {
+              NoteService.updateNote(note!['id'], _titleController.text,
+                      _descriptionController.text)
+                  .whenComplete(() => Navigator.of(context).pop());
               // NoteService.updateNote(document['id'], titleController.text,
               //         descriptionController.text)
               //     .whenComplete(() => Navigator.of(context).pop());
             }
           },
-          child: Text(noteId == null ? 'Add' : 'Update'),
+          child: Text(note == null ? 'Add' : 'Update'),
         ),
       ],
     );
