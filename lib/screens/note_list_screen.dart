@@ -67,7 +67,11 @@ class _NoteListScreenState extends State<NoteListScreen> {
                         onPressed: () {
                           NoteService.addNote(_titleController.text,
                                   _descriptionController.text)
-                              .whenComplete(() => Navigator.of(context).pop());
+                              .whenComplete(() {
+                            _titleController.clear();
+                            _descriptionController.clear();
+                            Navigator.of(context).pop();
+                          });
                         },
                         child: const Text('Save')),
                   ],
@@ -173,7 +177,7 @@ class NoteList extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () {
                                 NoteService.updateNote(
-                                        document.id,
+                                        document['id'],
                                         titleController.text,
                                         descriptionController.text)
                                     .whenComplete(
@@ -190,7 +194,7 @@ class NoteList extends StatelessWidget {
                   subtitle: Text(document['Description']),
                   trailing: InkWell(
                     onTap: () {
-                      _showDeleteConfirmationDialog(context, document.id);
+                      _showDeleteConfirmationDialog(context, document['id']);
                     },
                     child: const Padding(
                       padding:
